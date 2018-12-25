@@ -60,3 +60,5 @@ print (d)
 print ("Something : ", d[1], " later: ", d[2], " length: ", type(d))
 
 print ("Something : ", d[1], " later: ", d[2], " length: ", type(d))
+
+print ("Done till Dictionary in TutorialsPoint")

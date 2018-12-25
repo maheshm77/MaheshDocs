@@ -58,3 +58,5 @@ print (lstMr)
 print (d)
 
 print ("Something : ", d[1], " later: ", d[2], " length: ", type(d))
+
+print ("Something : ", d[1], " later: ", d[2], " length: ", type(d))

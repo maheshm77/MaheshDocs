@@ -1,0 +1,183 @@
+sklearn.preprocessing.LabelEncoder
+sklearn.preprocessing.OneHotEncoder
+pandas.get_dummies
+
+       
+With Imputer : 7407.040410958904
+       
+       DataFrame.axes
+DataFrame.ndim
+DataFrame.size
+DataFrame.shape
+DataFrame.memory_usage([index, deep])
+
+
+
+features = ['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
+       'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig',
+       'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType',
+       'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
+       'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType',
+       'MasVnrArea', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual',
+       'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1',
+       'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'Heating',
+       'HeatingQC', 'CentralAir', 'Electrical', '1stFlrSF', '2ndFlrSF',
+       'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath',
+       'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'KitchenQual',
+       'TotRmsAbvGrd', 'Functional', 'Fireplaces', 'FireplaceQu', 'GarageType',
+       'GarageYrBlt', 'GarageFinish', 'GarageCars', 'GarageArea', 'GarageQual',
+       'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF',
+       'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC',
+       'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',
+       'SaleCondition']
+
+query = ("""
+        -- Select all the columns we want in our joined table
+        SELECT COUNT(sc.commit) 
+        FROM `bigquery-public-data.github_repos.sample_files` as sf,
+        `bigquery-public-data.github_repos.sample_commits` as sc
+        WHERE sf.path LIKE '%.py' AND sf.repo_name = sc.repo_name -- what columns should we join on?
+        """)
+
+file_count_by_license = github.query_to_pandas_safe(query, max_gb_scanned=6)
+print (file_count_by_license)
+
+--31695737
+
+
+
+query = ("""
+        SELECT COUNT(sf.path) 
+        FROM `bigquery-public-data.github_repos.sample_files` as sf
+        WHERE sf.path LIKE '%.py'
+        """)
+
+file_count_by_license = github.query_to_pandas_safe(query, max_gb_scanned=6)
+print (file_count_by_license)
+
+--1231972
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### STEP 2
+
+#### Convert categorical variables into dummy/indicator variables - BEGIN
+### get_dummies is used to get one-hot encoding
+training_data_dummies = pd.get_dummies(training_data)            
+#### Convert categorical variables into dummy/indicator variables - BEGIN
+
+
+
+
+
+
+#### STEP 3
+
+#### Get features common to both training data & test data. - BEGIN
+
+## Get axes to check the common features - BEGIN
+list_training_data_dummies_axes = training_data_dummies.axes
+## Get axes to check the common features - END
+
+
+#print ("\n\n\n\n axes : ", list_training_data_dummies_axes[1], "\n\n\n\n")
+
+features_list = [];
+
+#comparing value of two lists
+for item in list_training_data_dummies_axes[1]:
+    #print("item : ", item)
+    for item1 in list_test_data_dummies_axes[1]:
+        if item == item1:
+             features_list.append(item)
+
+#print ("\n\n\n\nfeatures_list length : ", len(features_list))
+#### Get features common to both training data & test data. - END
+
+
+#### STEP 4
+
+#### Make X for the model - BEGIN
+training_data_dummies_xSet = training_data_dummies [features_list]
+#### Make X for the model - END
+
+
+#impute the data // Imputer didn't made any difference.. MAE was same in both cases when tried to predict with training data only
+imputer = SimpleImputer()
+X = training_data_dummies_xSet
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Create model, fit training data with the common features - BEGIN
+### Create model, fit training data with the common features - END
+
+
+#### STEP 5
+
+#### Predict SalePrice, using test data with the common features - BEGIN
+
+#### Predict SalePrice, using test data with the common features - END
+
+
+
+
+
+
+
+my_modelXGB = XGBRegressor() #(n_estimators=1000, learning_rate=0.05)
+# Add silent=True to avoid printing out updates with each cycle
+my_modelXGB.fit(train_X, train_y)
+
+
+my_pipeline = make_pipeline(SimpleImputer(), XGBRegressor(random_state=1))
+my_pipeline.fit(train_X, train_y)
+predictions = my_pipeline.predict(val_X)
+
+
+
+
+
+
+
+
+
+
+
+
+
+my_modelXGB = XGBRegressor()
+Mean Absolute Error using RandomForestRegressor:  10971.544526301368
+Mean Absolute Error using XGBRegressor:  6842.4935522260275
+
+my_modelXGB = XGBRegressor(n_estimators=1000)
+Mean Absolute Error using RandomForestRegressor:  12869.679666027396
+Mean Absolute Error using XGBRegressor:  9250.079144777395
+
+my_modelXGB = XGBRegressor(n_estimators=1000, learning_rate=0.05)
+Mean Absolute Error using RandomForestRegressor:  11895.055272328767
+Mean Absolute Error using XGBRegressor:  8773.953386986303

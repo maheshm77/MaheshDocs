@@ -1,0 +1,9 @@
+RangeIndex(start=0, stop=1460, step=1)
+Index(['Id', 'MSSubClass', 'LotFrontage', 'LotArea', 'OverallQual',
+       'OverallCond', 'YearBuilt', 'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1',
+       ...
+       'SaleType_ConLw', 'SaleType_New', 'SaleType_Oth', 'SaleType_WD',
+       'SaleCondition_Abnorml', 'SaleCondition_AdjLand',
+       'SaleCondition_Alloca', 'SaleCondition_Family', 'SaleCondition_Normal',
+       'SaleCondition_Partial'],
+      dtype='object', length=305)

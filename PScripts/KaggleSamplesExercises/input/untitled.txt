@@ -1,0 +1,6 @@
+sklearn.preprocessing.LabelEncoder
+sklearn.preprocessing.OneHotEncoder
+pandas.get_dummies
+
+ : predictedSalePrice :  [206640.  174465.  222820.  155510.  282764.3]
+  : predictedSalePrice :  [123180.  149240.  180360.  183400.  195745.6]
